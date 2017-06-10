@@ -9,17 +9,19 @@ public class TextController : MonoBehaviour {
 	public Text text;
 	
 	private enum States {
-		title_screen, story_0, story_1, story_2, story_3, the_spot_0, the_spot_1 , the_base_0, the_base_1, doppl_battle_0, the_battle_1, game_over
+		title_screen, story_0, story_1, story_2, story_3, the_spot_0, the_spot_1 , the_base_0, the_base_1, 
+		doppl_battle_0, doppl_battle_1, doppl_battle_2,doppl_battle_2a, doppl_battle_2b, doppl_battle_2c, doppl_battle_2f,
+		doppl_battle_3, doppl_battle_3a, doppl_battle_3b, doppl_battle_3c, doppl_battle3f, game_over_doppl
 	};
 	
-	private enum Scenes { title, story, spot, destroyed_base};
+	private enum Scenes { title, story, spot, destroyed_base, doppl_battle };
 	
 	private Scenes currentScene;
 	private States title_state;
 	private States story_state;
 	private States spot_state;
 	private States base_state;
-	private States doople_state;
+	private States doppl_state;
 	private States maw_state;
 	private States currentState;
 	
@@ -53,8 +55,6 @@ public class TextController : MonoBehaviour {
 	has_shield = false;
 	stare_into_maw = true;
 	doppl_start = false;
-	
-	
 	}
 	
 	void HpHurt(int hurtBy) {
@@ -192,7 +192,7 @@ public class TextController : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.B)) { stare_into_maw = false; currentScene = Scenes.destroyed_base; }
 		if (Input.GetKeyDown(KeyCode.M)) { stare_into_maw = false; currentState = States.the_spot_0; }
-		if (Input.GetKeyDown(KeyCode.I)) { stare_into_maw = false; currentState = States.the_battle_1; }
+		if (Input.GetKeyDown(KeyCode.I)) { stare_into_maw = false; currentState = States.doppl_battle_1; }
 	}
 	
 	void the_base_0 () {
@@ -214,26 +214,91 @@ public class TextController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.R))  { currentScene = Scenes.spot; }
 	}
 	
-	void the_battle_0 () {
+	void doppl_battle_0 () {
 		text.text = "You find the source of the explosions. Another mech desperately fighting against a horde creatures.\n\n"+
 		"H to help\n\n"+
 		"R to go back to the spot";
 		if (Input.GetKeyDown(KeyCode.H)) { 
-			currentState = States.the_spot_0; 
-			has_shield = true;}
-		if (Input.GetKeyDown(KeyCode.R)) { currentState = States.the_spot_0; }
+			doppl_state = States.doppl_battle_1; doppl_start= true }
+		if (Input.GetKeyDown(KeyCode.R)) { spot_state = States.the_spot_1; currentScene=Scenes.spot; }
+		
 	}
 	
-	void the_battle_1 () {
-		text.text = "You find the source of the explosions. Another mech desperately fighting against a horde creatures.\n\n"+
-			"H to help\n\n"+
-				"R to go back to the spot";
-		if (Input.GetKeyDown(KeyCode.T)) { 
-			currentState = States.the_spot_0; 
-			has_shield = true;}
-		if (Input.GetKeyDown(KeyCode.R)) { currentState = States.the_spot_0; }
-	}
+	void doppl_battle_1 () {
+		text.text = "Ahh its a corrupted mech, its enemy slain it starts firing shots at you!\n\n"+
+			"E to escape\n\n"+
+				"F to fight";
+		if (Input.GetKeyDown(KeyCode.E)) { doppl_state = States.doppl_battle_2;} 
 	
+		if (Input.GetKeyDown(KeyCode.F)) { doppl_state = States.doppl_battle_3;} 
+			}
+			
+	void doppl_battle_2 () {
+		text.text = "Through the remains of the shipyard, you play a dangerous game of hide and seek.  Each hiding spot quickly reduced to scrap by the laser gatling gun."+
+		"The chase has forced you to run through a gravity dock holding up a large dreadnought cruiser, though the flickering of the repulsors told you it wouldn't be floating for long" + 
+		"Quickly you dash to the other end of the dock, while the corrupted continues to pursure you oblivious to thier surroundings. As you prepare to make your next move" +
+		"You find the genrators powering the dock.\n\n"+
+			"D to destory the generators\n\n"+
+				"A to Ambush the Mech";
+		if (Input.GetKeyDown(KeyCode.D)) { 
+			doppl_state = States.doppl_battle_2a;} 
+		if (Input.GetKeyDown(KeyCode.A)) { 
+		doppl_state = States.doppl_battle_2b;} 
+		}
+		
+	void doppl_battle_2a () {
+		text.text = "Oblivous to thier surroundings the corrupted mech is crushed by the dropping of the dreadnought on top of them." +
+				"Your mech's alarm systems start blaring. The dreadnoughts core was already in bad shape and the drop made it worse.\n\n"+
+				"R to return to the spot\n\n";
+		if (Input.GetKeyDown(KeyCode.R)) { 
+			doppl_state = States.doppl_battle_2a; doppl_dead = false;} 
+		}
+		
+	void doppl_battle_2b () {
+		text.text = "You manage to escape from the sights of the corrupted mech. Pateintly you wait behind the generators out of sight.\n\n";
+			if (has_shield == true) { HpHurt(10); has_ggun = true; 
+				text.text+= "With the aid of your sheild you mitigate the damage from the gatling gun. You knock the mech off blanace and slice off the arm with gatling gun."+
+				"it falls to the ground, still firing. Grazes your torso and hits the generator causing it to malfunction, dropping the dreadnought on the corrupted mech.\n\n";
+				}
+				else { HpHurt(30); has_ggun = true;
+				text.text+= " The muzzle of the gatling gun turns in your direction, barrels blazing doing signifgant damage to your mech. Despite the damage you charge at the enemy." +
+				 "As you bum rush the mech, the lasers of the gatling gun land on the generator. You see the repulsors start to flick." +
+				 "With your laser sword you hack off the arm holding the gatling laser, and deliver a forceful kick to the your enemy's torso pushing them underneath the dreadnought."+
+				 "There is the audible sound of the repulsors of the gravity dock suddenly losing power, followed by the cacophony of metal crunching metal. "}
+			text.text+="Your mech's alarm systems start blaring. The dreadnoughts core was already in bad shape and the drop made it worse.\n\n"+
+				"R to return to the spot\n\n";
+	if (Input.GetKeyDown(KeyCode.R)) { doppl_dead = false;
+			doppl_state = States.doppl_battle_2f; currentScene = Scenes.spot;}
+		}
+		
+	void doppl_battle_3 () {
+		text.text = "Staring down the 7 barrels of a laser gatling gun, you throw caution to the wind and charge the corrupted mech.\n\n";
+		
+		if (has_shield == true) {  
+			text.text+= "Your shield effortlessly protects you from the gattling laser. With a shield bash you knock the gatling laser up into the air, and hack it off with your sword"+
+			"Unintelligble screams com over your comm system as you watch as the mech swings its large tentacle arm at you. But your reflexes have been finally honed from your training"+
+			"With another swipe you hack off the limb. You go for another swipe, and another, leaving the mech as just a torso.";
+		}
+		else { HpHurt(40); 
+			text.text+= " The gatling gun roars into action fireing a hail of lasers, damaging your mech." +
+				"With a mighty slash of your laser sword, you disarm the mech." +
+					"With your laser sword you hack off the arm holding the gatling laser, and deliver a forceful kick to the your enemy's torso pushing them underneath the dreadnought."+
+					"Unintelligble screams com over your comm system as you watch as the mech swings its large tentacle arm at you. But your reflexes have been finally honed from your training"+
+			"With another swipe you hack off the limb. You go for another swipe, and another, leaving the mech as just a torso.";}
+			
+		text.text+="Your enemy had been soundly defeated, but they continue to scream unitelligbly. As it continues on it starts to sound like something.\t\n\n"+
+		"F to finish them and grab the gun.\n\n"+
+		"G to grab the gun and leave"+
+		"L to listen to the shouting";
+		if (Input.GetKeyDown(KeyCode.F)) { 
+			doppl_state = States.doppl_battle_3a; has_ggun = true; doppl_dead = true;}
+		if (Input.GetKeyDown(KeyCode.G)) { 
+			doppl_state = States.doppl_battle_3b; has_ggun = true; doppl_dead = false; currentScene = Scenes.spot}
+		if (Input.GetKeyDown(KeyCode.L)) { 
+			doppl_state = States.doppl_battle_3c; doppl_dead = false;}
+	}
+		
+		
 	void game_over () {
 		text.text = "You find the source of the explosions. Another mech desperately fighting against a horde creatures.\n\n"+
 			"H to help\n\n"+
@@ -272,6 +337,14 @@ public class TextController : MonoBehaviour {
 		print (base_state);
 		if (base_state == States.the_base_0) {the_base_0 ();}
 		else if (base_state == States.the_base_1 ) {the_base_1();}
+	}
+	
+	void doppl_battle () {
+		print (doppl_state);
+		if ( doppl_state == States.doppl_battle_0) {doppl_battle_0();}
+		else if (doppl_state == States.doppl_battle_1) {doppl_battle_1();}
+		else if (doppl_state == States.doppl_battle_2) {doppl_battle_2();}
+		else if (doppl_state == States.doppl_battle_3) {doppl_battle_3();}
 	}
 	#endregion
 	

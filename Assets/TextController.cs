@@ -71,7 +71,6 @@ public class TextController : MonoBehaviour {
 	#region lose states
 	void GameOver () {
 	 if (currentHp <= 0){
-	 text.text = "Game Over, Press space to start over";
 	 hitpoints.text="*****************************************";
 	 sanity.text="*****************************************";
 	 gameover = true ;	 
@@ -142,10 +141,10 @@ public class TextController : MonoBehaviour {
 		   "To your left appears to be remains of the base camp for the last expedition teams condemned to explore the otherside." +
 		    "You walk up to the giant maw like structure, you step on some big scrap of metal. Removing your foot you quickly realize it’s a sign " + 
 		    "'Welcome To Stoneview Stadium Home of the Quarrymen' A shiver goes down your spine as you realize it’s no creature. "  +
-		    "Your moment of clarity is interrupted as your mech is rocked by the force of a nearby explosion. Several warnings pop up on your screen of another mech fighting nearby.\n\n" +
+		    "Your moment of clarity is interrupted as your mech is rocked by the force of a nearby explosion. Your systems indicate a functional mech in the nearby shipyard.\n\n" +
 				"B to inspect the base camp\n\n" + 
 				"M to enter the 'maw'\n\n" + 
-				"I to move towards the unknown mech";
+				"I to invistage the shipyard.";
 		if (Input.GetKeyDown(KeyCode.B)) { currentScene = Scenes.destroyed_base; }
 		if (Input.GetKeyDown(KeyCode.M)) { }
 		if (Input.GetKeyDown(KeyCode.I)) { currentScene = Scenes.doppl_battle;}
@@ -154,7 +153,7 @@ public class TextController : MonoBehaviour {
 	void the_spot_1 () {
 	if (stare_into_maw == true) {
 		text.text = "You have returned back to the position in front of the entrace to the destroyed stadium. Through the camera on your mechanized suit you stare into "+
-			"the darkness,  your suit's hand hovers at the hilt of an energy sword." +
+			"the darkness,  your suit's hand hovers at the hilt of your sword." +
 			"You jump back with your weapon drawn. It's blue glow casts a light into the darknes, revealing nothing.\n\n" +
 			"Was there anything there to begin with?\n\n";
 			}
@@ -169,12 +168,10 @@ public class TextController : MonoBehaviour {
 		
 	}
 		else if (doppl_start == true && doppl_dead == false) {
-		text.text+= "Thanks to your clever thinking your had taken out the corrupted mech pursuing you.  If only you could have gotten the gattling laser out of it.\n\n " +
-		"an errie silence washes over the area.";
+		text.text+= "Thanks to your clever thinking your had taken out the corrupted mech pursuing you.";
 		}
-		
 		else if (doppl_start == false && doppl_dead == false) {
-			text.text+= "Sounds of weapons fire and explosions echo off the ruins. The energy signature of the mysterious mech still going strong.\n\n";
+			text.text+= "Sounds of weapons fire and explosions echo off the ruins. The battle at the shipyard continues.\n\n";
 		}
 	
 	if (has_ggun == true && has_shield == true) {
@@ -192,7 +189,7 @@ public class TextController : MonoBehaviour {
 			
 			text.text += "B to inspect the base camp\n\n" + 
 			"M to enter the 'maw'\n\n" + 
-			"I to move towards the unknown mech";
+				"I to invistage the shipyard.";
 			
 
 		if (Input.GetKeyDown(KeyCode.B)) { stare_into_maw = false; currentScene = Scenes.destroyed_base; }
@@ -237,7 +234,7 @@ public class TextController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.E)) { doppl_state = States.doppl_battle_2;} 
 	
 		if (Input.GetKeyDown(KeyCode.F)) { doppl_state = States.doppl_battle_3;
-			if (has_shield == false) {HpHurt(40);}
+			if (has_shield == false) {HpHurt(50);}
 				} 
 			}
 			
@@ -253,7 +250,7 @@ public class TextController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.A)) { 
 		doppl_state = States.doppl_battle_2b;
 		if (has_shield == true) { HpHurt(10);} 
-			else { HpHurt(30);}
+			else { HpHurt(50);}
 			}
 		}
 		
@@ -268,7 +265,7 @@ public class TextController : MonoBehaviour {
 	void doppl_battle_2b () {
 		text.text = "You manage to escape from the sights of the corrupted mech. Pateintly you wait behind the generators out of sight.\n\n";
 			if (has_shield == true) { has_ggun = true; 
-				text.text+= "With the aid of your sheild you mitigate the damage from the gatling gun. You knock the mech off blanace and slice off the arm with gatling gun."+
+				text.text+= "With the aid of your sheild you mitigate most the damage from the gatling gun. You knock the mech off blanace and slice off the arm with gatling gun."+
 				"it falls to the ground, still firing. Grazes your torso and hits the generator causing it to malfunction, dropping the dreadnought on the corrupted mech.\n\n";
 				}
 				 else {has_ggun = true;
@@ -279,16 +276,16 @@ public class TextController : MonoBehaviour {
 			text.text+="Your mech's alarm systems start blaring. The dreadnoughts core was already in bad shape and the drop made it worse.\n\n"+
 			"R to get out of there!\t\n\n";
 	if (Input.GetKeyDown(KeyCode.R)) { doppl_dead = false;
-			doppl_state = States.doppl_battle_2c; currentScene = Scenes.spot;}
+			doppl_state = States.doppl_battle_2c;}
 		}
 	
 	void doppl_battle_2c () {
 		text.text = "You dash out of the area utlizing your boosters to get as much distance from the dreadnought as you can. " +
 		"Just as the decribid stadium comes into view you are rocked by a violent shockwave, sending you tumbling." +
-		" As you recover you see the giant cloud of destruction rising up from the area where the shipyard was."+
+		" As you recover you see the giant cloud of destruction rising up from the area where the shipyard was.\n\n"+
 		"C to continue to the spot\n\n";
 		if (Input.GetKeyDown(KeyCode.C)) { 
-			doppl_state = States.doppl_battle_2f; doppl_dead = false; currentScene = Scenes.spot;} 
+			doppl_state = States.doppl_battle_2f; doppl_dead = false; currentScene = Scenes.spot; spot_state = States.the_spot_1;} 
 	}
 	
 	void doppl_battle_2f () {
@@ -315,50 +312,50 @@ public class TextController : MonoBehaviour {
 			
 		text.text+="Your enemy had been soundly defeated, but they continue to scream over your comms unitelligbly. As it continues on it starts to sound like something.\t\n\n"+
 		"F to finish them and grab the gun.\n\n"+
-		"G to grab the gun and leave"+
+		"G to grab the gun and leave\n\n"+
 		"L to listen to the shouting";
 		if (Input.GetKeyDown(KeyCode.F)) { 
 			doppl_state = States.doppl_battle_3a; has_ggun = true;}
 		if (Input.GetKeyDown(KeyCode.G)) { 
 			doppl_state = States.doppl_battle_3b; has_ggun = true; doppl_dead = false;}
 		if (Input.GetKeyDown(KeyCode.L)) { 
-			doppl_state = States.doppl_battle_3c; doppl_dead = false;}
+			doppl_state = States.doppl_battle_3c; doppl_dead = false;SanityHurt(20);}
 		}
 	void doppl_battle_3a () {
-		text.text = " Without a second through you walk closer to the downed mech, and drive your sword through the center part of the torso. Your comms imeadiate become quiet."+
+		text.text = " Without a second through you walk closer to the downed mech, and drive your sword through the torso. Your comms imeadiate become quiet."+
 		"you pick up the gattling gun and get ready to return to the spot when moans start coming through the comms. Quickly you unload several rounds from the gattling laser into "+
 		"the torso. Silence. You walk away not waiting else to happen.\n\n"+
 		"R to return to the spot";
-		if (Input.GetKeyDown(KeyCode.R)) { doppl_state = States.doppl_battle_3f; doppl_dead = true; currentScene = Scenes.spot;}
+		if (Input.GetKeyDown(KeyCode.R)) { doppl_state = States.doppl_battle_3f; spot_state = States.the_spot_1; doppl_dead = true; currentScene = Scenes.spot;}
 	}
 	void doppl_battle_3b () {
 		text.text = "Ignoring the angry unearthly yells overwhelming your comms, you pick up the gattling gun and begin to walk towards the spot.  The yelling only seems to get louder."+
 		"You simply flip a switch to turn off your comms and walk back to the spot in silence.\n\n"+
 		"C to continue";
-		if (Input.GetKeyDown(KeyCode.C)) {doppl_state = States.doppl_battle_3f; currentScene = Scenes.spot;}
+		if (Input.GetKeyDown(KeyCode.C)) {doppl_state = States.doppl_battle_3f; spot_state = States.the_spot_1; currentScene = Scenes.spot;}
 		}
 		
 	void doppl_battle_3c () {
 		text.text="You focus on listening to the angry uneartly yells.  Slowly the voice starts to become more intelligible... More human...You start to question if you are really hearing it speak...\n\n"+
 		"End ... Suffering ... you must ...\n\n"+
-		"The torso of the mech opens up and the pilot reveals themself, its body vaugely humaniod, only with extra tentacles. The torn uniform, and helmet indicate it was once a pilot "+
+		"The torso of the mech opens up and the pilot reveals themself, its body vaugely humaniod creature with extra tentacles. The torn military uniform, and helmet indicate it was once a pilot "+
 		"like yourself. It collapses onto the top of the mech, falling silent.  Your curiousty of what is under the helmet eats away at you, but in the back of your mind you know something"+
 		"is horrifcally off.\n\n"+
 		"K to make sure they're dead\n\n"+
-		"H to take off they're dead\n\n"+
+		"H to take off thier helmet\n\n"+
 		"W to walk away with the gattling gun.";
 		if (Input.GetKeyDown(KeyCode.K)) { 
 			doppl_state = States.doppl_battle_3a; has_ggun = true;}
 		if (Input.GetKeyDown(KeyCode.H)) { 
 			doppl_state = States.doppl_battle_3d;}
 		if (Input.GetKeyDown(KeyCode.W)) { 
-				doppl_state = States.doppl_battle_3f; doppl_dead = false; has_ggun = true; currentScene = Scenes.spot;}
+			doppl_state = States.doppl_battle_3f; doppl_dead = false; has_ggun = true; spot_state = States.the_spot_1; currentScene = Scenes.spot;}
 	}
 	
 	void doppl_battle_3d () {
 	text.text = "Wary, you approach the mech and pick up the pilot. Carefully you pull the helmet off...\n\n"+
 		"C to Continue";
-		if (Input.GetKeyDown(KeyCode.C)) { gameover= true; currentScene = Scenes.game_over; game_over_state = States.game_over_doppl_helm;}
+		if (Input.GetKeyDown(KeyCode.C)) { gameover= true; currentScene = Scenes.game_over; game_over_state = States.game_over_doppl_helm; currentHp = 0; currentSanity = 0;}
 	}
 	void doppl_battle_3f () {
 		text.text = "You have returned to the shipyard where fought the corrupted mech.";
@@ -467,8 +464,12 @@ public class TextController : MonoBehaviour {
 				Start ();
 			}
 		}
+		hitpoints.text = "HP: " + currentHp;
+		sanity.text= "Sanity: " + currentSanity;
 		GameOver();
-		
+		if (Input.GetKeyDown(KeyCode.P)) {
+			Start ();
+		}
 			} 
 		}
 	

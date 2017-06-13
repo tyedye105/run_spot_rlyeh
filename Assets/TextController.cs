@@ -26,7 +26,7 @@ public class TextController : MonoBehaviour {
 	private States maw_state;
 	private States game_over_state;
 	
-	private float currentTime;
+	private float startTime;
 	
 	
 	int currentHp;
@@ -60,6 +60,7 @@ public class TextController : MonoBehaviour {
 	has_shield = false;
 	stare_into_maw = true;
 	doppl_start = false;
+	startTime = 5f;
 	}
 	
 	void HpHurt(int hurtBy) {
@@ -68,6 +69,11 @@ public class TextController : MonoBehaviour {
 	
 	void SanityHurt(int hurtBy) {
 		currentSanity -= hurtBy;
+	}
+	
+	void displayTime() {
+		startTime -= Time.deltaTime;
+		timer.text= startTime.ToString() + " s";
 	}
 	
 	
@@ -451,6 +457,7 @@ public class TextController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () { 
+		displayTime();
 		print (currentScene);
 		if (currentScene == Scenes.title) {title();}
 		else if (currentScene == Scenes.story) {story();}
@@ -458,7 +465,7 @@ public class TextController : MonoBehaviour {
 		else if (currentScene == Scenes.destroyed_base) {destroyed_base();}
 		else if (currentScene == Scenes.doppl_battle) {doppl_battle();}
 		else if (currentScene == Scenes.game_over) { game_over_screen();}
-	
+		
 
 		
 		if (gameover == true) {
@@ -467,12 +474,19 @@ public class TextController : MonoBehaviour {
 				Start ();
 			}
 		}
+		
 		hitpoints.text = "HP: " + currentHp;
 		sanity.text= "Sanity: " + currentSanity;
+		
+		if (startTime <0f) { HpHurt(20); startTime = 5f;}
+			
+			
 		GameOver();
 		if (Input.GetKeyDown(KeyCode.P)) {
 			Start ();
 		}
+		
+		
 			} 
 		}
 	

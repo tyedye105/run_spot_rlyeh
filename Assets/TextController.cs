@@ -7,6 +7,7 @@ public class TextController : MonoBehaviour {
 	public Text hitpoints;
 	public Text sanity;
 	public Text text;
+	public Text timer;
 	
 	private enum States {
 		title_screen, story_0, story_1, story_2, story_3, the_spot_0, the_spot_1 , the_base_0, the_base_1, 
@@ -25,6 +26,8 @@ public class TextController : MonoBehaviour {
 	private States maw_state;
 	private States game_over_state;
 	
+	private float currentTime;
+	
 	
 	int currentHp;
 	int currentSanity;
@@ -39,6 +42,7 @@ public class TextController : MonoBehaviour {
 	
 	
 	
+	
 
 	// Use this for initialization
 	void Start () {
@@ -48,7 +52,6 @@ public class TextController : MonoBehaviour {
 	spot_state = States.the_spot_0;
 	base_state = States.the_base_0;
 	doppl_state = States.doppl_battle_0;
-		
 	currentHp = 200;
 	currentSanity = 100;
 	hitpoints.text = "HP: " + currentHp;

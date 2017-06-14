@@ -25,7 +25,8 @@ public class TextController : MonoBehaviour {
 	private States doppl_state;
 	private States maw_state;
 	private States game_over_state;
-	
+	private int mech_mode;
+	// 0 is explore mode, 1 is battle mode, 2 is boss mode.	
 	private float startTime;
 	
 	

@@ -12,10 +12,11 @@ public class TextController : MonoBehaviour {
 	private enum States {
 		title_screen, story_0, story_1, story_2, story_3, the_spot_0, the_spot_1 , the_base_0, the_base_1, 
 		doppl_battle_0, doppl_battle_1, doppl_battle_2,doppl_battle_2a, doppl_battle_2b, doppl_battle_2c, doppl_battle_2f,
-		doppl_battle_3, doppl_battle_3a, doppl_battle_3b, doppl_battle_3c, doppl_battle_3d, doppl_battle_3f, game_over_doppl_helm, game_over_reg
+		doppl_battle_3, doppl_battle_3a, doppl_battle_3b, doppl_battle_3c, doppl_battle_3d, doppl_battle_3f, game_over_doppl_helm, game_over_reg,
+		tunnel_0, tunnel_1, tunnel_1c, tunnel_passage, tunnel_cover, tunnel_fire
 	};
 	
-	private enum Scenes { title, story, spot, destroyed_base, doppl_battle, game_over };
+	private enum Scenes { title, story, spot, destroyed_base, doppl_battle, game_over, the_tunnel };
 	
 	private Scenes currentScene;
 	private States title_state;
@@ -23,11 +24,13 @@ public class TextController : MonoBehaviour {
 	private States spot_state;
 	private States base_state;
 	private States doppl_state;
-	private States maw_state;
+	private States tunnel_state;
 	private States game_over_state;
-	private int mech_mode;
+	//private int mech_mode; scrapped due to scope creep.
 	// 0 is explore mode, 1 is battle mode, 2 is boss mode.	
 	private float startTime;
+	private int eye_distance = 500;
+	
 	
 	
 	int currentHp;
@@ -39,7 +42,8 @@ public class TextController : MonoBehaviour {
 	bool doppl_start;
 	bool doppl_dead;
 	bool stare_into_maw;
-	
+	bool active_eye;
+	bool has_cover;
 	
 	
 	
@@ -61,7 +65,7 @@ public class TextController : MonoBehaviour {
 	has_shield = false;
 	stare_into_maw = true;
 	doppl_start = false;
-	startTime = 5f;
+	startTime = 3f;
 	}
 	
 	void HpHurt(int hurtBy) {
@@ -107,7 +111,7 @@ public class TextController : MonoBehaviour {
 		 "It was good fun until he ran so fast he pierced the veil between our world and theirs.\n\n" +
 		 "Thiers? Poor sweet naive child.\n\n" +
 		 "The hole Spot created in our dimension has never sealed back up, and if it is not closed our world will end as we know it!" + 
-		 "The only hope is that bringing that damn dog will restore the barrier between our worlds.\n\n" +
+		 "The only hope is that bringing that damn dog back, so we can figure out how to close it.\n\n" +
 		 "You must catch Spot!\n\n" +
 		 "Press space to continue";
 		  
@@ -116,17 +120,17 @@ public class TextController : MonoBehaviour {
 	}
 	
 	void story_1 () {
-		text.text = "Alright all systems are green.  Your mission is to enter through the rift to the otherworld at ground zero, and search their world for Spot, and bring him back through. " +
+		text.text = "Alright all systems are green.  Spot's vitals have been detected in the middle of 'The Spot'. Your will be landing just in the  outer edges of the perimiter. " +
 		  "The sensor arrays on your mech have been programed to recognize Spot’s signature. " +
-		  "Once on the otherside your mech suit will be able to protect you from many of the physical dangers lurking beyond the veil, but it is not invincible. " +
-		  "As I mentioned, the mech will protect your from the physical dangers, but they are not the only danger.\n\n" +
+		  "Your mech suit will be able to protect you from many of the physical dangers from beyond the veil, but it is not invicinble. " +
+		  "\n\n" +
 				"Press space to continue";
 		
 		if (Input.GetKeyDown(KeyCode.Space)) { story_state = States.story_2; }
 	}
 	
 	void story_2 () {
-		text.text = "The creatures, and entities you will encounter are nothing like you have seen before. Multiple expedition teams have been sent through the rift, most never come back, " + 
+		text.text = "The creatures, and entities you will encounter are nothing like you have seen before. You are not the first to go after that damned dog. Most never come back, " + 
 		"and those that have been driven insane, saying one word over, and over again. “R’lyeh”. " +
 		"Make no mistake, you will have no choice but to fight you way through the creatures, but don’t lose yourself in the process! " + 
 		"You are approaching The Spot now.  Good Luck" +
@@ -146,13 +150,13 @@ public class TextController : MonoBehaviour {
 	}
 	
 	void the_spot_0 () {
-		text.text = "Your scanner's start beeping at you furiously as you have come with 2000 meters of the rift. " +
-		  "In front of you appears to be the remains of some giant creature, the energy signature of the rift deep inside it." + 
-		   "To your left appears to be remains of the base camp for the last expedition teams condemned to explore the otherside." +
+		text.text = "Your scanner's start beeping at you furiously as you have come with 2000 meters your objective. " +
+		  "In front of you appears to be the remains of some giant creature, the vitals of spot deep inside it." + 
+		   "To your left appears to be remains of the forward camp from the first battles that took place after the incident." +
 		    "You walk up to the giant maw like structure, you step on some big scrap of metal. Removing your foot you quickly realize it’s a sign " + 
 		    "'Welcome To Stoneview Stadium Home of the Quarrymen' A shiver goes down your spine as you realize it’s no creature. "  +
 		    "Your moment of clarity is interrupted as your mech is rocked by the force of a nearby explosion. Your systems indicate a functional mech in the nearby shipyard.\n\n" +
-				"B to inspect the base camp\n\n" + 
+				"B to inspect the forward camp\n\n" + 
 				"M to enter the 'maw'\n\n" + 
 				"I to invistage the shipyard.";
 		if (Input.GetKeyDown(KeyCode.B)) { currentScene = Scenes.destroyed_base; }
@@ -197,7 +201,7 @@ public class TextController : MonoBehaviour {
  
 		
 			
-			text.text += "B to inspect the base camp\n\n" + 
+			text.text += "B to inspect the forward camp\n\n" + 
 			"M to enter the 'maw'\n\n" + 
 				"I to invistage the shipyard.";
 			
@@ -376,6 +380,40 @@ public class TextController : MonoBehaviour {
 			"R to return to the spot";}
 		if (Input.GetKeyDown(KeyCode.R)) {currentScene = Scenes.spot;}
 	}		
+	
+	void tunnel_0 () {
+		text.text= " Weapons at the ready you slowly make your way down the dark tunnel.  You turn on your camera systems for low light enviroments. " +
+		" The feed camera transforms from shapless darkness, into discernable obstacles in various shades of green.  Despite the monsterous outside apperances, the  " +
+		"passage was still steel and concrete a small comfort in an area overun with monsters.\n\n" +
+		"With out warning, agigantic eyeball the size of your mech appears "+
+		"500 meters infront of you. It's black pupil narrows as it starts to glow, and a indeciperable language floods your comm stystem.\n\n" +
+		"press SPACE to continue";
+			if(Input.GetKeyDown(KeyCode(Space))){ }
+		
+			}
+			
+	void tunnel_1 () {
+		text.text= "The glow of the continues to intensify becoming almost unbearable, if you movements were not constratin by the enviroment you could use "+
+		"your boosters to thier full potential... The joys of tight spaces.  Your navigation systems highlights places to the take cover along the tunnel as "+
+		"you advance towards the eye.\n\n"+
+		"Target is " + eye_distance + "m away..." + "Hostile action in: ";
+		;
+		if(Input.GetKeyDown(KeyCode(Space))){ }
+		
+	}
+	
+	void tunnel_1c () {
+		text.text= " Quickly you reteat back the way you came. You hope that when you return that the eye has gone away, but you know it will be watching, waiting for you.\n\n"+
+		"press SPACE to continue";
+		;
+		if(Input.GetKeyDown(KeyCode(Space))){ }
+		
+	}
+	
+	void_tunnel_cover() {
+		text.text= "Urgently you move into one of small "
+	}
+	
 	void game_over_reg () {
 		text.text = "You find the source of the explosions. Another mech desperately fighting against a horde creatures.\n\n"+
 			"H to help\n\n"+
@@ -392,7 +430,6 @@ public class TextController : MonoBehaviour {
 			"Your heart stops as you feel a slimy tentacle wrap around your neck."+
 			"With a loud snap your world goes black. The horrific image is gone.\n\n"+
 			"Game Over. Press Space to go back to the title.";
-			
 		
 	}
 	
@@ -443,6 +480,17 @@ public class TextController : MonoBehaviour {
 		else if (doppl_state == States.doppl_battle_3f) {doppl_battle_3f();}
 	}
 	
+	void the_tunnel () {
+		print(tunnel_state);
+			if ( tunnel_state == States.tunnel_0) {tunnel_0();}
+			else if ( tunnel_state ==States.tunnel_1) {tunnel_1();}
+			else if ( tunnel_state ==States.tunnel_1c) {tunnel_1c();}
+			else if ( tunnel_state == States.tunnel_passage) {tunnel_passage();}
+			else if ( tunnel__state == States.tunnel_cover) {tunnel_cover();}
+			else if ( tunnel_state == States.tunnel_fire) {tunnel_fire();}
+		
+	}
+	
 	void game_over_screen() {
 		print(game_over_state);
 		if (game_over_state == States.game_over_doppl_helm) {game_over_doppl_helm();}
@@ -458,7 +506,6 @@ public class TextController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () { 
-		displayTime();
 		print (currentScene);
 		if (currentScene == Scenes.title) {title();}
 		else if (currentScene == Scenes.story) {story();}
@@ -466,6 +513,7 @@ public class TextController : MonoBehaviour {
 		else if (currentScene == Scenes.destroyed_base) {destroyed_base();}
 		else if (currentScene == Scenes.doppl_battle) {doppl_battle();}
 		else if (currentScene == Scenes.game_over) { game_over_screen();}
+		else if (currentScene == Scenes.the_tunnel) { the_tunnel();}
 		
 
 		
@@ -476,11 +524,11 @@ public class TextController : MonoBehaviour {
 			}
 		}
 		
+		if (currentScene == Scenes.the_tunnel && active_eye == true  ) {displayTime();}
+		
 		hitpoints.text = "HP: " + currentHp;
 		sanity.text= "Sanity: " + currentSanity;
 		
-		if (startTime <0f) { HpHurt(20); startTime = 5f;}
-			
 			
 		GameOver();
 		if (Input.GetKeyDown(KeyCode.P)) {

@@ -382,23 +382,22 @@ public class TextController : MonoBehaviour {
 	}		
 	
 	void tunnel_0 () {
-		text.text= " Weapons at the ready you slowly make your way down the dark tunnel.  You turn on your camera systems for low light enviroments. " +
+		text.text = " Weapons at the ready you slowly make your way down the dark tunnel.  You turn on your camera systems for low light enviroments. " +
 		" The feed camera transforms from shapless darkness, into discernable obstacles in various shades of green.  Despite the monsterous outside apperances, the  " +
 		"passage was still steel and concrete a small comfort in an area overun with monsters.\n\n" +
 		"With out warning, agigantic eyeball the size of your mech appears "+
 		"500 meters infront of you. It's black pupil narrows as it starts to glow, and a indeciperable language floods your comm stystem.\n\n" +
 		"press SPACE to continue";
-			if(Input.GetKeyDown(KeyCode(Space))){ }
-		
 			}
 			
+			
 	void tunnel_1 () {
+		active_eye = true;
 		text.text= "The glow of the continues to intensify becoming almost unbearable, if you movements were not constratin by the enviroment you could use "+
 		"your boosters to thier full potential... The joys of tight spaces.  Your navigation systems highlights places to the take cover along the tunnel as "+
 		"you advance towards the eye.\n\n"+
 		"Target is " + eye_distance + "m away..." + "Hostile action in: ";
 		;
-		if(Input.GetKeyDown(KeyCode(Space))){ }
 		
 	}
 	
@@ -406,13 +405,24 @@ public class TextController : MonoBehaviour {
 		text.text= " Quickly you reteat back the way you came. You hope that when you return that the eye has gone away, but you know it will be watching, waiting for you.\n\n"+
 		"press SPACE to continue";
 		;
-		if(Input.GetKeyDown(KeyCode(Space))){ }
 		
 	}
 	
-	void_tunnel_cover() {
-		text.text= "Urgently you move into one of small "
+	void tunnel_cover() {
+		has_cover = true;
+		text.text= "You are in cover, protect from the attack of the eyeball.";
 	}
+	
+	void tunnel_passage() {
+		has_cover = false;
+		text.text= "You can be attacked by the eye.";
+	}
+	
+	void tunnel_fire() {
+		active_eye = false;
+		text.text= "The eye has fired.";
+	}
+
 	
 	void game_over_reg () {
 		text.text = "You find the source of the explosions. Another mech desperately fighting against a horde creatures.\n\n"+
@@ -481,12 +491,13 @@ public class TextController : MonoBehaviour {
 	}
 	
 	void the_tunnel () {
+	
 		print(tunnel_state);
 			if ( tunnel_state == States.tunnel_0) {tunnel_0();}
 			else if ( tunnel_state ==States.tunnel_1) {tunnel_1();}
 			else if ( tunnel_state ==States.tunnel_1c) {tunnel_1c();}
 			else if ( tunnel_state == States.tunnel_passage) {tunnel_passage();}
-			else if ( tunnel__state == States.tunnel_cover) {tunnel_cover();}
+			else if ( tunnel_state == States.tunnel_cover) {tunnel_cover();}
 			else if ( tunnel_state == States.tunnel_fire) {tunnel_fire();}
 		
 	}
